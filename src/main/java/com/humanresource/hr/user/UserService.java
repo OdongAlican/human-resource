@@ -16,7 +16,11 @@ public class UserService {
     public List<User> fetchAllUsers(){ return userRepository.findAll(); }
 
     public User saveUser(User user){
-        return userRepository.save(user);
+        try {
+            return userRepository.save(user);
+        } catch (Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
     };
 
     public Optional<User> findUSer(Long userId){ return userRepository.findById(userId);}

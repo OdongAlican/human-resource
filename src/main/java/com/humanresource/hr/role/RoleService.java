@@ -15,7 +15,14 @@ public class RoleService {
         try {
             return roleRepository.findAll();
         } catch (Exception e){
-            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public Role createRole(Role role){
+        try {
+            return roleRepository.save(role);
+        } catch (Exception e){
             throw new RuntimeException(e.getMessage());
         }
     }

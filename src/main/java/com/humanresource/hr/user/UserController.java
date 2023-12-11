@@ -22,6 +22,13 @@ public class UserController {
 
     @PostMapping("/users")
     public ResponseEntity<?> createUser(@RequestBody User user){
+        if(user == null ||
+                user.getRole() == null ||
+                user.getEmail() == null ||
+                user.getAddress() == null
+        ){
+            return new ResponseEntity<>("Provide all fields", HttpStatus.METHOD_NOT_ALLOWED);
+        }
         try {
             User response = userService.saveUser(user);
             return new ResponseEntity<>(response, HttpStatus.CREATED);
