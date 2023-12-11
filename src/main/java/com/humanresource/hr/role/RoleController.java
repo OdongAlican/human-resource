@@ -15,13 +15,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1")
 public class RoleController {
-
-    private RoleRepository roleRepository;
+    @Autowired
+    private RoleService roleService;
 
     @GetMapping("/roles")
     public ResponseEntity<?> fetchAllRoles(){
         try {
-            List<Role> roles = roleRepository.findAll();
+            List<Role> roles = roleService.fetchAllRoles();
             return new ResponseEntity<>(roles, HttpStatus.OK);
         } catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);

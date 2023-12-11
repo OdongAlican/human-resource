@@ -1,11 +1,15 @@
 package com.humanresource.hr.role;
 
+import com.humanresource.hr.user.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -17,5 +21,8 @@ public class Role {
     @GeneratedValue
     private Long Id;
     private String name;
+
+    @OneToMany
+    private List<User> users;
 
 }
