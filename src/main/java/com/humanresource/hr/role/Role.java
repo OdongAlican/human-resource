@@ -22,7 +22,7 @@ public class Role {
     private Long Id;
     private String name;
 
-    @OneToMany
+    @OneToMany(mappedBy = "role")
     private List<User> users;
 
 }
