@@ -31,17 +31,8 @@ public class UserController {
 
         if (optionalRole.isPresent()) {
             Role role = optionalRole.get();
-
-            User requestBody = User.builder()
-                    .first_name(user.getFirst_name())
-                    .last_name(user.getLast_name())
-                    .email(user.getEmail())
-                    .address(user.getAddress())
-                    .role(role)
-                    .build();
-
             try {
-                User response = userService.saveUser(requestBody);
+                User response = userService.saveUser(user, role);
                 return new ResponseEntity<>(response, HttpStatus.CREATED);
             } catch (Exception e) {
                 return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -51,27 +42,35 @@ public class UserController {
         }
     }
 
-    @PutMapping("/users/{id}")
-    public  ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User user){
+    @PutMapping("/users/{roleId}")
+    public  ResponseEntity<?> updateUser(@PathVariable Long roleId, @RequestBody User user){
 
-        Optional<User> currentUser = userService.findUSer(id);
+        Optional<User> currentUser = userService.findUSer(user.getId());
+        Optional<Role> optionalRole = roleService.findOneRole(roleId);
 
-        if(currentUser.isEmpty()){
+        if(currentUser.isEmpty() ){
             return new ResponseEntity<>("User does not exist", HttpStatus.NOT_FOUND);
         }
 
-        try {
+        else if (optionalRole.isPresent()){
+            try {
             User existingUser = currentUser.get();
+            Role role = optionalRole.get();
             existingUser.setFirst_name(user.getFirst_name());
             existingUser.setLast_name(user.getLast_name());
             existingUser.setAddress(user.getAddress());
             existingUser.setEmail(user.getEmail());
 
-            User response = userService.saveUser(existingUser);
+            User response = userService.saveUser(existingUser, role);
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
+        } else {
+            return new ResponseEntity<>("Role not found", HttpStatus.NOT_FOUND);
+        }
+
     }
 
     @GetMapping("/users/{id}")
