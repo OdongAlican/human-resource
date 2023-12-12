@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RoleService {
@@ -22,6 +23,14 @@ public class RoleService {
     public Role createRole(Role role){
         try {
             return roleRepository.save(role);
+        } catch (Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public Optional<Role> findOneRole(Long roleId){
+        try{
+            return roleRepository.findById(roleId);
         } catch (Exception e){
             throw new RuntimeException(e.getMessage());
         }

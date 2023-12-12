@@ -1,5 +1,7 @@
 package com.humanresource.hr.user;
 
+import com.humanresource.hr.role.Role;
+import com.humanresource.hr.role.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,26 +16,38 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private RoleService roleService;
+
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers(){
         List<User> users = userService.fetchAllUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @PostMapping("/users")
-    public ResponseEntity<?> createUser(@RequestBody User user){
-        if(user == null ||
-                user.getRole() == null ||
-                user.getEmail() == null ||
-                user.getAddress() == null
-        ){
-            return new ResponseEntity<>("Provide all fields", HttpStatus.METHOD_NOT_ALLOWED);
-        }
-        try {
-            User response = userService.saveUser(user);
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
-        } catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    @PostMapping("/users/{roleId}")
+    public ResponseEntity<?> createUser( @PathVariable Long roleId, @RequestBody User user){
+        Optional<Role> optionalRole = roleService.findOneRole(roleId);
+
+        if (optionalRole.isPresent()) {
+            Role role = optionalRole.get();
+
+            User requestBody = User.builder()
+                    .first_name(user.getFirst_name())
+                    .last_name(user.getLast_name())
+                    .email(user.getEmail())
+                    .address(user.getAddress())
+                    .role(role)
+                    .build();
+
+            try {
+                User response = userService.saveUser(requestBody);
+                return new ResponseEntity<>(response, HttpStatus.CREATED);
+            } catch (Exception e) {
+                return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else {
+            return new ResponseEntity<>("Role not found", HttpStatus.NOT_FOUND);
         }
     }
 
