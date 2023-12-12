@@ -34,5 +34,20 @@ public class UserService {
         }
     };
 
+    public User updateUser(User existingUser, User requestBody, Role role){
+        try {
+            existingUser.setFirst_name(requestBody.getFirst_name());
+            existingUser.setLast_name(requestBody.getLast_name());
+            existingUser.setAddress(requestBody.getAddress());
+            existingUser.setEmail(requestBody.getEmail());
+            existingUser.setRole(role);
+            return userRepository.save(existingUser);
+
+        } catch (Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
+
+    }
+
     public Optional<User> findUSer(Long userId){ return userRepository.findById(userId);}
 }

@@ -54,15 +54,10 @@ public class UserController {
 
         else if (optionalRole.isPresent()){
             try {
-            User existingUser = currentUser.get();
-            Role role = optionalRole.get();
-            existingUser.setFirst_name(user.getFirst_name());
-            existingUser.setLast_name(user.getLast_name());
-            existingUser.setAddress(user.getAddress());
-            existingUser.setEmail(user.getEmail());
-
-            User response = userService.saveUser(existingUser, role);
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
+                Role role = optionalRole.get();
+                User existingUser = currentUser.get();
+                User response = userService.updateUser(existingUser, user, role);
+                return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
