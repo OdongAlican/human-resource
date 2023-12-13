@@ -1,5 +1,6 @@
 package com.humanresource.hr.role;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.humanresource.hr.user.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,6 +24,7 @@ public class Role {
     private String name;
 
     @OneToMany(mappedBy = "role")
+    @JsonIgnore
     private List<User> users;
 
 }
