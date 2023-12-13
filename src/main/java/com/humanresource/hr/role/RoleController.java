@@ -32,4 +32,17 @@ public class RoleController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PutMapping("/roles/{roleID}/permissions/{permID}")
+    public ResponseEntity<?> assignPermissionsToRole(
+            @PathVariable Long roleID,
+            @PathVariable Long permID
+    ){
+        try{
+            Role response = roleService.assignPermissionsToRole(roleID, permID);
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
+        } catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 }
