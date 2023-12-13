@@ -2,10 +2,7 @@ package com.humanresource.hr.role;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.humanresource.hr.user.User;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,7 +16,7 @@ import java.util.List;
 public class Role {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long Id;
     private String name;
 

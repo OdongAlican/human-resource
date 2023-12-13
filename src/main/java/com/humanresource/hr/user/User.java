@@ -1,6 +1,5 @@
 package com.humanresource.hr.user;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.humanresource.hr.role.Role;
 import jakarta.persistence.*;
 import lombok.*;
