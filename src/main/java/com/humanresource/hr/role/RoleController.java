@@ -45,4 +45,14 @@ public class RoleController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @DeleteMapping("/roles/{roleID}")
+    public ResponseEntity<?> deleteRole(@PathVariable Long roleID){
+        try{
+            var response = roleService.deleteRole(roleID);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }

@@ -5,9 +5,7 @@ import com.humanresource.hr.permission.PermissionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class RoleService {
@@ -60,6 +58,21 @@ public class RoleService {
         }
         } catch (Exception e){
             throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public Map<String, String> deleteRole(Long roleID) {
+        Map<String,String> response = new HashMap<String, String>();
+
+        try{
+            roleRepository.deleteById(roleID);
+            response.put("response", "Deleted successfully");
+            response.put("success", "true");
+            return response;
+
+        } catch (Exception e){
+            response.put("response", e.getMessage());
+            return response;
         }
     }
 }
