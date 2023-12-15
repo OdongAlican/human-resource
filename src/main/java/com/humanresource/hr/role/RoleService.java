@@ -80,4 +80,16 @@ public class RoleService {
         Optional<Role> response = roleRepository.findById(roleID);
         return response.orElse(null);
     }
+
+    public Role updateRole(Long roleID, Role role) {
+
+        try {
+            Role currentData = roleRepository.findById(roleID).orElse(null);
+            assert currentData != null;
+            currentData.setName(role.getName());
+            return roleRepository.save(currentData);
+        } catch (Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
+    }
 }

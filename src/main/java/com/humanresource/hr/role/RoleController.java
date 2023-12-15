@@ -56,6 +56,19 @@ public class RoleController {
         }
     }
 
+    @PutMapping("/roles/{roleID}")
+    public ResponseEntity<?> updateRole(
+            @PathVariable Long roleID,
+            @RequestBody Role role
+    ){
+        try {
+            Role response = roleService.updateRole(roleID, role);
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
+        } catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @DeleteMapping("/roles/{roleID}")
     public ResponseEntity<?> deleteRole(@PathVariable Long roleID){
         try{
