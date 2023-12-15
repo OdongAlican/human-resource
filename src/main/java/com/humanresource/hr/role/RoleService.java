@@ -75,4 +75,9 @@ public class RoleService {
             return response;
         }
     }
+
+    public Role fetchRole(Long roleID) {
+        Optional<Role> response = roleRepository.findById(roleID);
+        return response.orElse(null);
+    }
 }

@@ -23,6 +23,16 @@ public class RoleController {
         }
     }
 
+    @GetMapping("/roles/{roleID}")
+    public ResponseEntity<?> fetchRole(@PathVariable Long roleID){
+        try {
+            Role role = roleService.fetchRole(roleID);
+            return new ResponseEntity<>(role, HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
     @PostMapping("/roles")
     public ResponseEntity<?> createRole(@RequestBody Role role){
         try {
