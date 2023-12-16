@@ -1,7 +1,6 @@
 package com.humanresource.hr.user;
 
 import com.humanresource.hr.role.Role;
-import com.humanresource.hr.role.RoleService;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -10,7 +9,6 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-    private RoleService roleService;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -32,7 +30,7 @@ public class UserService {
         } catch (Exception e){
             throw new RuntimeException(e.getMessage());
         }
-    };
+    }
 
     public User updateUser(User existingUser, User requestBody, Role role){
         try {

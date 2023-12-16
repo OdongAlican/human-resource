@@ -33,4 +33,14 @@ public class PermissionController {
             throw  new RuntimeException(e.getMessage());
         }
     }
+
+    @DeleteMapping("/permissions/{permID}")
+    public ResponseEntity<?> deletePermission(@PathVariable Long permID){
+        try{
+            var response = permissionService.deletePermission(permID);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
