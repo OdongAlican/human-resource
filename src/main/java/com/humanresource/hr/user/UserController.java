@@ -42,11 +42,14 @@ public class UserController {
         }
     }
 
-    @PutMapping("/users/{roleId}")
-    public  ResponseEntity<?> updateUser(@PathVariable Long roleId, @RequestBody User user){
+    @PutMapping("/users/{userID}/role/{roleID}")
+    public  ResponseEntity<?> updateUser(
+            @PathVariable Long roleID,
+            @PathVariable Long userID,
+            @RequestBody User user){
 
-        Optional<User> currentUser = userService.findUSer(user.getId());
-        Optional<Role> optionalRole = roleService.findOneRole(roleId);
+        Optional<User> currentUser = userService.findUSer(userID);
+        Optional<Role> optionalRole = roleService.findOneRole(roleID);
 
         if(currentUser.isEmpty() ){
             return new ResponseEntity<>("User does not exist", HttpStatus.NOT_FOUND);
