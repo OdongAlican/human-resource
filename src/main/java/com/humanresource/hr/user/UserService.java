@@ -2,7 +2,10 @@ package com.humanresource.hr.user;
 
 import com.humanresource.hr.role.Role;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -48,4 +51,19 @@ public class UserService {
     }
 
     public Optional<User> findUSer(Long userId){ return userRepository.findById(userId);}
+
+    public Object deleteUser(Long userID) {
+
+        Map<String,String> response = new HashMap<String, String>();
+        try{
+            userRepository.deleteById(userID);
+            response.put("response", "Deleted successfully");
+            response.put("success", "true");
+            return response;
+
+        } catch (Exception e){
+            response.put("response", e.getMessage());
+            return response;
+        }
+    }
 }
