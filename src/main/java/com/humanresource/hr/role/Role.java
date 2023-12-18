@@ -24,7 +24,7 @@ public class Role {
     private Long Id;
     private String name;
 
-    @OneToMany(mappedBy = "role")
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<User> users;
 
