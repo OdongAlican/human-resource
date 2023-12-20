@@ -2,9 +2,12 @@ package com.humanresource.hr.user;
 
 import com.humanresource.hr.role.Role;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.validator.constraints.Length;
 
 @Data
 @Builder
@@ -15,15 +18,21 @@ import org.hibernate.annotations.OnDeleteAction;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NonNull
     private Long id;
-    @NonNull
+
+    @NotNull
+    @Length(max = 20)
     private String first_name;
-    @NonNull
+
+    @NotNull
+    @Length(max = 20)
     private String last_name;
-    @NonNull
+
+    @NotNull
+    @Email
     private String email;
-    @NonNull
+
+    @NotNull
     private String address;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
