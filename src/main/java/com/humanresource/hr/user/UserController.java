@@ -64,11 +64,9 @@ public class UserController {
         } catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
         } else {
             return new ResponseEntity<>("Role not found", HttpStatus.NOT_FOUND);
         }
-
     }
 
     @GetMapping("/users/{id}")
