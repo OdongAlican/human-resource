@@ -27,7 +27,7 @@ public class PermissionService {
             response.put("response", "Deleted successfully");
             response.put("success", true);
             return response;
-        }catch (Exception e){
+        } catch (Exception e){
             response.put("response", e.getMessage());
             return response;
         }
