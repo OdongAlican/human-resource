@@ -3,11 +3,11 @@ package com.humanresource.hr.user;
 import com.humanresource.hr.role.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.lang.NonNull;
 
 @Data
 @Builder
@@ -20,19 +20,20 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @NonNull
     @Length(max = 20)
     private String first_name;
 
-    @NotNull
+    @NonNull
     @Length(max = 20)
     private String last_name;
 
-    @NotNull
+    @NonNull
     @Email
+    @Column(unique = true)
     private String email;
 
-    @NotNull
+    @NonNull
     private String address;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
