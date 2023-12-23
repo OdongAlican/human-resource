@@ -20,18 +20,18 @@ public class User {
     private Long id;
 
     @Length(max = 20, min = 3)
-    @NotBlank
+    @NotBlank(message = "First name cannot be null")
     private String first_name;
 
     @Length(max = 20, min = 3)
-    @NotBlank
+    @NotBlank(message = "Last name cannot be null")
     private String last_name;
 
-    @NotBlank
+    @NotBlank(message = "Email cannot be null")
     @Length(min = 3, max = 20)
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "Address cannot be null")
     @Length(min = 3, max = 20)
     private String address;
 
