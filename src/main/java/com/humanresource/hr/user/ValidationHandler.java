@@ -15,6 +15,7 @@ import java.util.Map;
 
 @ControllerAdvice
 public class ValidationHandler extends ResponseEntityExceptionHandler {
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,
@@ -24,7 +25,7 @@ public class ValidationHandler extends ResponseEntityExceptionHandler {
 
         Map<String,String> errors = new HashMap<>();
 
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
+        ex.getBindingResult().getAllErrors().forEach(error -> {
             String fieldName = ((FieldError) error).getField();
             String message = error.getDefaultMessage();
             errors.put(fieldName,message);

@@ -2,7 +2,6 @@ package com.humanresource.hr.user;
 
 import com.humanresource.hr.role.Role;
 import com.humanresource.hr.role.RoleService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +27,6 @@ public class UserController {
 
     @PostMapping("/users/{roleId}")
     public ResponseEntity<?> createUser(
-            @Valid
             @PathVariable Long roleId,
             @RequestBody User user){
 
