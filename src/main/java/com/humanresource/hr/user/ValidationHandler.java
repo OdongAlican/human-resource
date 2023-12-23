@@ -30,10 +30,6 @@ public class ValidationHandler extends ResponseEntityExceptionHandler {
             errors.put(fieldName,message);
         });
 
-        System.out.println("Request errors");
-        System.out.println("..................");
-        System.out.println(errors);
-        System.out.println("Response Errors");
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 }

@@ -2,10 +2,7 @@ package com.humanresource.hr.user;
 
 import com.humanresource.hr.role.Role;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -36,8 +33,12 @@ public class User {
     @Email(message = "Must be a valid email")
     private String email;
 
-    @NotNull
     @NotBlank
+    @Pattern(regexp = "^\\+256[347]\\d{8}$", message = "Invalid Ugandan phone number")
+    private String phone;
+
+    @NotNull
+    @NotBlank(message = "Address cannot be blank")
     private String address;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
