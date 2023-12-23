@@ -2,6 +2,7 @@ package com.humanresource.hr.user;
 
 import com.humanresource.hr.role.Role;
 import com.humanresource.hr.role.RoleService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,11 @@ public class UserController {
     }
 
     @PostMapping("/users/{roleId}")
-    public ResponseEntity<?> createUser( @PathVariable Long roleId, @RequestBody User user){
+    public ResponseEntity<?> createUser(
+            @Valid
+            @PathVariable Long roleId,
+            @RequestBody User user){
+
         Optional<Role> optionalRole = roleService.findOneRole(roleId);
 
         if (optionalRole.isPresent()) {
@@ -35,7 +40,7 @@ public class UserController {
                 User response = userService.saveUser(user, role);
                 return new ResponseEntity<>(response, HttpStatus.CREATED);
             } catch (Exception e) {
-                return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
             }
         } else {
             return new ResponseEntity<>("Role not found", HttpStatus.NOT_FOUND);

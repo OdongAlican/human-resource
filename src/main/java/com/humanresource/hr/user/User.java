@@ -2,11 +2,13 @@ package com.humanresource.hr.user;
 
 import com.humanresource.hr.role.Role;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.validator.constraints.Length;
 
 @Data
 @Builder
@@ -19,20 +21,23 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Length(max = 20, min = 3)
-    @NotBlank(message = "First name cannot be null")
+    @Size(max = 20, min = 3, message = "Must be at least characters and max 20")
+    @NotNull(message = "First Name cannot be null")
+    @NotBlank
     private String first_name;
 
-    @Length(max = 20, min = 3)
-    @NotBlank(message = "Last name cannot be null")
+    @Size(max = 20, min = 3, message = "Must be at least characters and max 20")
+    @NotNull(message = "Last name cannot be null")
+    @NotBlank
     private String last_name;
 
-    @NotBlank(message = "Email cannot be null")
-    @Length(min = 3, max = 20)
+    @Size(max = 20, min = 3, message = "Must be at least characters and max 20")
+    @NotNull(message = "Email cannot be null")
+    @Email(message = "Must be a valid email")
     private String email;
 
-    @NotBlank(message = "Address cannot be null")
-    @Length(min = 3, max = 20)
+    @NotNull
+    @NotBlank
     private String address;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
