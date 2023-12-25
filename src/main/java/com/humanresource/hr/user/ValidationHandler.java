@@ -1,36 +1,22 @@
 package com.humanresource.hr.user;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@ControllerAdvice
-public class ValidationHandler extends ResponseEntityExceptionHandler {
+@Component
+public class ValidationHandler {
 
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            MethodArgumentNotValidException ex,
-            HttpHeaders headers,
-            HttpStatusCode status,
-            WebRequest request) {
+    public Map<String,Object> ResponseEntityExceptionHandler(Exception e) {
+        Map<String,Object> errors = new HashMap<String,Object>();
 
-        Map<String,String> errors = new HashMap<>();
+        if(e instanceof RuntimeException runtimeException){
+            String[] errorDetails = runtimeException.getMessage().split("/n");
+            errors.put("errors", errorDetails);
+            System.out.println(errors);
+        }
 
-        ex.getBindingResult().getAllErrors().forEach(error -> {
-            String fieldName = ((FieldError) error).getField();
-            String message = error.getDefaultMessage();
-            errors.put(fieldName,message);
-        });
-
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        return errors;
     }
 }

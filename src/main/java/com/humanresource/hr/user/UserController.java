@@ -19,6 +19,9 @@ public class UserController {
     @Autowired
     private RoleService roleService;
 
+    @Autowired
+    private ValidationHandler validationHandler;
+
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers(){
         List<User> users = userService.fetchAllUsers();
@@ -38,10 +41,11 @@ public class UserController {
                 User response = userService.saveUser(user, role);
                 return new ResponseEntity<>(response, HttpStatus.CREATED);
             } catch (Exception e) {
-                return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+                var response = validationHandler.ResponseEntityExceptionHandler(e);
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
         } else {
-            return new ResponseEntity<>("Role not found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Error creating user", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
