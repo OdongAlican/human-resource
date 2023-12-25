@@ -28,7 +28,6 @@ public class User {
     @NotBlank
     private String last_name;
 
-    @Size(max = 20, min = 3, message = "Must be at least characters and max 20")
     @NotNull(message = "Email cannot be null")
     @Email(message = "Must be a valid email")
     private String email;

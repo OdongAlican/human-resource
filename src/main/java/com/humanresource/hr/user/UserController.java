@@ -19,8 +19,6 @@ public class UserController {
     @Autowired
     private RoleService roleService;
 
-    @Autowired
-    private ValidationHandler validationHandler;
 
     @GetMapping("/users")
     public ResponseEntity<List<User>> getAllUsers(){
@@ -41,8 +39,7 @@ public class UserController {
                 User response = userService.saveUser(user, role);
                 return new ResponseEntity<>(response, HttpStatus.CREATED);
             } catch (Exception e) {
-                var response = validationHandler.ResponseEntityExceptionHandler(e);
-                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
             }
         } else {
             return new ResponseEntity<>("Error creating user", HttpStatus.INTERNAL_SERVER_ERROR);
