@@ -28,11 +28,9 @@ public class User {
     @NotBlank
     private String last_name;
 
-    @NotNull(message = "Email cannot be null")
     @Email(message = "Must be a valid email")
     private String email;
 
-    @NotBlank
     @Pattern(regexp = "^\\+256[347]\\d{8}$", message = "Invalid Ugandan phone number")
     private String phone;
 
