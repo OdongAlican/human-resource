@@ -29,6 +29,7 @@ public class User {
     private String last_name;
 
     @Email(message = "Must be a valid email")
+    @NotNull(message = "Email cannot be null")
     private String email;
 
     @Pattern(regexp = "^\\+256[347]\\d{8}$", message = "Invalid Ugandan phone number")
