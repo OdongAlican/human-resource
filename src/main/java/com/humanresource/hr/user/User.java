@@ -33,6 +33,7 @@ public class User {
     private String email;
 
     @Pattern(regexp = "^\\+256[347]\\d{8}$", message = "Invalid Ugandan phone number")
+    @NotNull(message = "Phone number must be provided")
     private String phone;
 
     @NotNull
