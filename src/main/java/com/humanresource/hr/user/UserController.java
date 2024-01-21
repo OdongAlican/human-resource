@@ -34,18 +34,19 @@ public class UserController {
 
         Optional<Role> optionalRole = roleService.findOneRole(roleId);
 
-        if (optionalRole.isPresent()) {
-            Role role = optionalRole.get();
             try {
+                if (optionalRole.isPresent()) {
+                    Role role = optionalRole.get();
+
                 User response = userService.saveUser(user, role);
                 return new ResponseEntity<>(response, HttpStatus.CREATED);
+                } else {
+                    throw new ControllerRequestException("Role not found");
+                }
             } catch (Exception e) {
-                //return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
                 throw new ControllerRequestException(e.getMessage());
             }
-        } else {
-            throw new ControllerRequestException("Error creating user");
-        }
+
     }
 
     @PutMapping("/users/{userID}/role/{roleID}")

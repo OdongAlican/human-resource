@@ -14,10 +14,12 @@ public class ControllerExceptionHandler {
     public static final HttpStatus BAD_REQUEST = HttpStatus.BAD_REQUEST;
     @ExceptionHandler(value = ControllerRequestException.class)
     public ResponseEntity<Object> handleApiRequestException(ControllerRequestException e){
+
         ControllerException controllerException = new ControllerException(
                 e.getMessage(),
                 BAD_REQUEST,
-                ZonedDateTime.now(ZoneId.of("Z"))
+                ZonedDateTime.now(ZoneId.of("Z")),
+                false
         );
 
         return new ResponseEntity<>(controllerException, BAD_REQUEST);
