@@ -9,13 +9,13 @@ import java.time.ZonedDateTime;
 @Getter
 @NoArgsConstructor
 public class ControllerException {
-    private  String message;
+    private  String errors;
     private  HttpStatus httpStatus;
     private  ZonedDateTime timestamp;
     private Boolean success;
 
     public ControllerException(String message, HttpStatus badRequest, ZonedDateTime z, Boolean success) {
-        this.message = message;
+        this.errors = message;
         this.httpStatus = badRequest;
         this.timestamp = z;
         this.success = success;

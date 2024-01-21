@@ -28,32 +28,22 @@ public class UserController {
     }
 
     @PostMapping("/users/{roleId}")
-    public ResponseEntity<?> createUser(
-            @PathVariable Long roleId,
-            @RequestBody User user){
+    public ResponseEntity<User> createUser( @PathVariable Long roleId, @RequestBody User user){
 
-        Optional<Role> optionalRole = roleService.findOneRole(roleId);
+        Optional<Role> role = roleService.findOneRole(roleId);
+        if (role.isEmpty())  throw new ControllerRequestException("Role not found");
 
-            try {
-                if (optionalRole.isPresent()) {
-                    Role role = optionalRole.get();
+        try {
+            User response = userService.saveUser(user, role.get());
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
 
-                User response = userService.saveUser(user, role);
-                return new ResponseEntity<>(response, HttpStatus.CREATED);
-                } else {
-                    throw new ControllerRequestException("Role not found");
-                }
-            } catch (Exception e) {
-                throw new ControllerRequestException(e.getMessage());
-            }
-
+        } catch (Exception e) {
+            throw new ControllerRequestException(e.getMessage());
+        }
     }
 
     @PutMapping("/users/{userID}/role/{roleID}")
-    public  ResponseEntity<?> updateUser(
-            @PathVariable Long roleID,
-            @PathVariable Long userID,
-            @RequestBody User user){
+    public  ResponseEntity<?> updateUser(@PathVariable Long roleID, @PathVariable Long userID,@RequestBody User user){
 
         Optional<User> currentUser = userService.findUSer(userID);
         Optional<Role> optionalRole = roleService.findOneRole(roleID);
