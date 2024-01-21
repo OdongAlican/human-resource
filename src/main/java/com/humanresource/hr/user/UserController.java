@@ -1,5 +1,6 @@
 package com.humanresource.hr.user;
 
+import com.humanresource.hr.exception.ControllerRequestException;
 import com.humanresource.hr.role.Role;
 import com.humanresource.hr.role.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,10 +40,11 @@ public class UserController {
                 User response = userService.saveUser(user, role);
                 return new ResponseEntity<>(response, HttpStatus.CREATED);
             } catch (Exception e) {
-                return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+                //return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+                throw new ControllerRequestException(e.getMessage());
             }
         } else {
-            return new ResponseEntity<>("Error creating user", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ControllerRequestException("Error creating user");
         }
     }
 
