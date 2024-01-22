@@ -1,21 +1,17 @@
 package com.humanresource.hr.user;
 
+import com.humanresource.hr.helper.Constants;
+import com.humanresource.hr.helper.DeleteResponse;
 import com.humanresource.hr.role.Role;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class UserService {
-
-    private final UserRepository userRepository;
-
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    @Autowired
+    private UserRepository userRepository;
 
     public List<User> fetchAllUsers(){ return userRepository.findAll(); }
 
@@ -29,42 +25,31 @@ public class UserService {
                 .phone(user.getPhone())
                 .role(role)
                 .build();
-        try {
-            return userRepository.save(requestBody);
-        } catch (Exception e){
-            throw new RuntimeException(e.getMessage());
-        }
+        return userRepository.save(requestBody);
     }
 
     public User updateUser(User existingUser, User requestBody, Role role){
-        try {
-            existingUser.setFirst_name(requestBody.getFirst_name());
-            existingUser.setLast_name(requestBody.getLast_name());
-            existingUser.setAddress(requestBody.getAddress());
-            existingUser.setEmail(requestBody.getEmail());
-            existingUser.setRole(role);
-            return userRepository.save(existingUser);
 
-        } catch (Exception e){
-            throw new RuntimeException(e.getMessage());
-        }
-
+        existingUser.setFirst_name(requestBody.getFirst_name());
+        existingUser.setLast_name(requestBody.getLast_name());
+        existingUser.setAddress(requestBody.getAddress());
+        existingUser.setEmail(requestBody.getEmail());
+        existingUser.setRole(role);
+        return userRepository.save(existingUser);
     }
 
-    public Optional<User> findUSer(Long userId){ return userRepository.findById(userId);}
+    public User findUSer(Long userId){ return userRepository.findById(userId).orElse(null);}
 
-    public Object deleteUser(Long userID) {
-
-        Map<String,String> response = new HashMap<String, String>();
-        try{
+    public DeleteResponse deleteUser(Long userID) {
+        DeleteResponse deleteResponse = new DeleteResponse();
+        if(userRepository.existsById(userID)){
             userRepository.deleteById(userID);
-            response.put("response", "Deleted successfully");
-            response.put("success", "true");
-            return response;
-
-        } catch (Exception e){
-            response.put("response", e.getMessage());
-            return response;
+            deleteResponse.setMessage(Constants.DELETED_SUCCESSFULLY);
+            deleteResponse.setSuccess(true);
+        } else {
+            deleteResponse.setMessage(Constants.ENTITY_NOT_FOUND);
+            deleteResponse.setSuccess(false);
         }
+        return deleteResponse;
     }
 }

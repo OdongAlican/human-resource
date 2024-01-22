@@ -45,18 +45,13 @@ public class UserController {
     @PutMapping("/users/{userID}/role/{roleID}")
     public  ResponseEntity<?> updateUser(@PathVariable Long roleID, @PathVariable Long userID,@RequestBody User user){
 
-        Optional<User> currentUser = userService.findUSer(userID);
+        User currentUser = userService.findUSer(userID);
         Optional<Role> optionalRole = roleService.findOneRole(roleID);
 
-        if(currentUser.isEmpty() ){
-            return new ResponseEntity<>("User does not exist", HttpStatus.NOT_FOUND);
-        }
-
-        else if (optionalRole.isPresent()){
+        if (optionalRole.isPresent()){
             try {
                 Role role = optionalRole.get();
-                User existingUser = currentUser.get();
-                User response = userService.updateUser(existingUser, user, role);
+                User response = userService.updateUser(currentUser, user, role);
                 return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -69,20 +64,20 @@ public class UserController {
     @GetMapping("/users/{id}")
     public ResponseEntity<?> getSingleUser(@PathVariable Long id){
         try{
-           Optional<User> user = userService.findUSer(id);
+           User user = userService.findUSer(id);
            return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ControllerRequestException(e.getMessage());
         }
     }
 
     @DeleteMapping("/users/{userID}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long userID){
+    public ResponseEntity<Object> deleteUser(@PathVariable Long userID){
         try{
             var response = userService.deleteUser(userID);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ControllerRequestException(e.getMessage());
         }
     }
 }

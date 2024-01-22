@@ -1,5 +1,6 @@
 package com.humanresource.hr.user;
 
+import com.humanresource.hr.helper.Constants;
 import com.humanresource.hr.role.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -18,24 +19,24 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "First Name must be provided")
-    @Size(max = 20, min = 3, message = "Must be at least 3 and max 20 characters")
+    @NotNull(message = Constants.NULL_FIELD_VALIDATOR)
+    @Size(max = 20, min = 3, message = Constants.NAME_VALIDATOR)
     private String first_name;
 
-    @NotNull(message = "Last name cannot be null")
-    @Size(max = 20, min = 3, message = "Must be at least 3 and max 20 characters")
+    @NotNull(message = Constants.NULL_FIELD_VALIDATOR)
+    @Size(max = 20, min = 3, message = Constants.NAME_VALIDATOR)
     private String last_name;
 
-    @Email(message = "Must be a valid email")
-    @NotNull(message = "Email must be provided")
+    @Email(message = Constants.EMAIL_VALIDATOR)
+    @NotNull(message = Constants.NULL_FIELD_VALIDATOR)
     private String email;
 
-    @NotNull(message = "Phone number must be provided")
-    @Pattern(regexp = "^\\+256\\d{9}", message = "Invalid Ugandan phone number")
+    @NotNull(message = Constants.NULL_FIELD_VALIDATOR)
+    @Pattern(regexp = Constants.PHONE_REGEX, message = Constants.PHONE_VALIDATOR)
     private String phone;
 
-    @NotBlank(message = "Address cannot be blank")
-    @NotNull(message = "Phone number must be provided")
+    @NotBlank(message = Constants.BLANK_FIELD_VALIDATOR)
+    @NotNull(message = Constants.NULL_FIELD_VALIDATOR)
     private String address;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
