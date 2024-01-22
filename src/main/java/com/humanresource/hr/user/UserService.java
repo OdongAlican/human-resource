@@ -26,6 +26,7 @@ public class UserService {
                 .last_name(user.getLast_name())
                 .email(user.getEmail())
                 .address(user.getAddress())
+                .phone(user.getPhone())
                 .role(role)
                 .build();
         try {

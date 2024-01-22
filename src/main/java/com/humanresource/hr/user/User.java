@@ -18,26 +18,24 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Size(max = 20, min = 3, message = "Must be at least characters and max 20")
-    @NotNull(message = "First Name cannot be null")
-    @NotBlank
+    @NotNull(message = "First Name must be provided")
+    @Size(max = 20, min = 3, message = "Must be at least 3 and max 20 characters")
     private String first_name;
 
-    @Size(max = 20, min = 3, message = "Must be at least characters and max 20")
     @NotNull(message = "Last name cannot be null")
-    @NotBlank
+    @Size(max = 20, min = 3, message = "Must be at least 3 and max 20 characters")
     private String last_name;
 
     @Email(message = "Must be a valid email")
-    @NotNull(message = "Email cannot be null")
+    @NotNull(message = "Email must be provided")
     private String email;
 
-    @Pattern(regexp = "^\\+256[347]\\d{8}$", message = "Invalid Ugandan phone number")
     @NotNull(message = "Phone number must be provided")
+    @Pattern(regexp = "^\\+256\\d{9}", message = "Invalid Ugandan phone number")
     private String phone;
 
-    @NotNull
     @NotBlank(message = "Address cannot be blank")
+    @NotNull(message = "Phone number must be provided")
     private String address;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
