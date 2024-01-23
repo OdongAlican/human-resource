@@ -14,31 +14,31 @@ public class RoleController {
     private RoleService roleService;
 
     @GetMapping("/roles")
-    public ResponseEntity<?> fetchAllRoles(){
+    public ResponseEntity<?> fetchAllRoles() {
         try {
             List<Role> roles = roleService.fetchAllRoles();
             return new ResponseEntity<>(roles, HttpStatus.OK);
-        } catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping("/roles/{roleID}")
-    public ResponseEntity<?> fetchRole(@PathVariable Long roleID){
+    public ResponseEntity<?> fetchRole(@PathVariable Long roleID) {
         try {
             Role role = roleService.fetchRole(roleID);
             return new ResponseEntity<>(role, HttpStatus.OK);
-        } catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
 
     @PostMapping("/roles")
-    public ResponseEntity<?> createRole(@RequestBody Role role){
+    public ResponseEntity<?> createRole(@RequestBody Role role) {
         try {
             Role response = roleService.createRole(role);
             return new ResponseEntity<>(response, HttpStatus.CREATED);
-        } catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -47,11 +47,11 @@ public class RoleController {
     public ResponseEntity<?> assignPermissionsToRole(
             @PathVariable Long roleID,
             @PathVariable Long permID
-    ){
-        try{
+    ) {
+        try {
             Role response = roleService.assignPermissionsToRole(roleID, permID);
             return new ResponseEntity<>(response, HttpStatus.CREATED);
-        } catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -60,21 +60,21 @@ public class RoleController {
     public ResponseEntity<?> updateRole(
             @PathVariable Long roleID,
             @RequestBody Role role
-    ){
+    ) {
         try {
             Role response = roleService.updateRole(roleID, role);
             return new ResponseEntity<>(response, HttpStatus.CREATED);
-        } catch (Exception e){
-            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @DeleteMapping("/roles/{roleID}")
-    public ResponseEntity<?> deleteRole(@PathVariable Long roleID){
-        try{
+    public ResponseEntity<?> deleteRole(@PathVariable Long roleID) {
+        try {
             var response = roleService.deleteRole(roleID);
             return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

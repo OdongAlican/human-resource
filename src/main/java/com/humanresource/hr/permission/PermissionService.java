@@ -20,14 +20,14 @@ public class PermissionService {
         return permissionRepository.findAll();
     }
 
-    public Map<String,Object> deletePermission(Long permID) {
-        Map<String,Object> response = new HashMap<>();
+    public Map<String, Object> deletePermission(Long permID) {
+        Map<String, Object> response = new HashMap<>();
         try {
             permissionRepository.deleteById(permID);
             response.put("response", "Deleted successfully");
             response.put("success", true);
             return response;
-        } catch (Exception e){
+        } catch (Exception e) {
             response.put("response", e.getMessage());
             return response;
         }

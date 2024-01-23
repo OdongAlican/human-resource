@@ -9,5 +9,6 @@ public class Constants {
     public static final String EMAIL_VALIDATOR = "Email address must be valid";
     public static final String PHONE_VALIDATOR = "Invalid Ugandan phone number";
     public static final String PHONE_REGEX = "^\\+256\\d{9}";
+    public static final String GENERAL_ROUTE = "/api/v1";
 
 }

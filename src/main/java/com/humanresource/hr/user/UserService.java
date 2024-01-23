@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -17,9 +16,14 @@ public class UserService {
     @Autowired
     private RoleService roleService;
 
-    public List<User> fetchAllUsers(){ return userRepository.findAll(); }
+    public List<User> fetchAllUsers() {
+        return userRepository.findAll();
+    }
 
-    public User saveUser(User user, Role role){
+    public User saveUser(User user, Long roleID) {
+
+        Role role = roleService.findOneRole(roleID).orElse(null);
+        assert role != null;
 
         User requestBody = User.builder()
                 .first_name(user.getFirst_name())
@@ -32,7 +36,7 @@ public class UserService {
         return userRepository.save(requestBody);
     }
 
-    public User updateUser(User request, Long userID, Long roleID){
+    public User updateUser(User request, Long userID, Long roleID) {
 
         User user = findUSer(userID);
         Role role = roleService.findOneRole(roleID).orElse(null);
@@ -47,11 +51,13 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User findUSer(Long userId){ return userRepository.findById(userId).orElse(null);}
+    public User findUSer(Long userId) {
+        return userRepository.findById(userId).orElse(null);
+    }
 
     public DeleteResponse deleteUser(Long userID) {
         DeleteResponse deleteResponse = new DeleteResponse();
-        if(userRepository.existsById(userID)){
+        if (userRepository.existsById(userID)) {
             userRepository.deleteById(userID);
             deleteResponse.setMessage(Constants.DELETED_SUCCESSFULLY);
             deleteResponse.setSuccess(true);
