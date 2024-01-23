@@ -3,15 +3,19 @@ package com.humanresource.hr.user;
 import com.humanresource.hr.helper.Constants;
 import com.humanresource.hr.helper.DeleteResponse;
 import com.humanresource.hr.role.Role;
+import com.humanresource.hr.role.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private RoleService roleService;
 
     public List<User> fetchAllUsers(){ return userRepository.findAll(); }
 
@@ -28,14 +32,19 @@ public class UserService {
         return userRepository.save(requestBody);
     }
 
-    public User updateUser(User existingUser, User requestBody, Role role){
+    public User updateUser(User request, Long userID, Long roleID){
 
-        existingUser.setFirst_name(requestBody.getFirst_name());
-        existingUser.setLast_name(requestBody.getLast_name());
-        existingUser.setAddress(requestBody.getAddress());
-        existingUser.setEmail(requestBody.getEmail());
-        existingUser.setRole(role);
-        return userRepository.save(existingUser);
+        User user = findUSer(userID);
+        Role role = roleService.findOneRole(roleID).orElse(null);
+
+        assert user != null && role != null;
+
+        user.setFirst_name(request.getFirst_name());
+        user.setLast_name(request.getLast_name());
+        user.setAddress(request.getAddress());
+        user.setEmail(request.getEmail());
+        user.setRole(role);
+        return userRepository.save(user);
     }
 
     public User findUSer(Long userId){ return userRepository.findById(userId).orElse(null);}

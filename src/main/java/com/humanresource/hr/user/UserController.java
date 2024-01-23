@@ -44,27 +44,18 @@ public class UserController {
 
     @PutMapping("/users/{userID}/role/{roleID}")
     public  ResponseEntity<?> updateUser(@PathVariable Long roleID, @PathVariable Long userID,@RequestBody User user){
-
-        User currentUser = userService.findUSer(userID);
-        Optional<Role> optionalRole = roleService.findOneRole(roleID);
-
-        if (optionalRole.isPresent()){
             try {
-                Role role = optionalRole.get();
-                User response = userService.updateUser(currentUser, user, role);
+                User response = userService.updateUser(user, userID, roleID);
                 return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        } else {
-            return new ResponseEntity<>("Role not found", HttpStatus.NOT_FOUND);
-        }
     }
 
-    @GetMapping("/users/{id}")
-    public ResponseEntity<?> getSingleUser(@PathVariable Long id){
+    @GetMapping("/users/{userID}")
+    public ResponseEntity<?> getSingleUser(@PathVariable Long userID){
         try{
-           User user = userService.findUSer(id);
+           User user = userService.findUSer(userID);
            return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (Exception e){
             throw new ControllerRequestException(e.getMessage());
