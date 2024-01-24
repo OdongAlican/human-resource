@@ -45,7 +45,7 @@ public class UserController {
     @GetMapping("/users/{userID}")
     public ResponseEntity<User> getSingleUser(@PathVariable Long userID) {
         try {
-            User user = userService.findUSer(userID);
+            User user = userService.findUser(userID);
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (Exception e) {
             throw new ControllerRequestException(e.getMessage());

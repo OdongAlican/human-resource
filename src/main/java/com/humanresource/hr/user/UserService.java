@@ -6,13 +6,16 @@ import com.humanresource.hr.role.Role;
 import com.humanresource.hr.role.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 public class UserService {
+
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private RoleService roleService;
 
@@ -20,12 +23,20 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
+    public User findUser(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException(Constants.NOT_FOUND + userId));
+    }
+
+    @Transactional
     public User saveUser(User user, Long roleID) {
-
         Role role = roleService.findOneRole(roleID);
-        assert role != null;
+        if (role == null) {
+            throw new IllegalArgumentException(Constants.NOT_FOUND + roleID);
+        }
 
-        User requestBody = User.builder()
+        User newUser = User.builder()
                 .first_name(user.getFirst_name())
                 .last_name(user.getLast_name())
                 .email(user.getEmail())
@@ -33,28 +44,28 @@ public class UserService {
                 .phone(user.getPhone())
                 .role(role)
                 .build();
-        return userRepository.save(requestBody);
+
+        return userRepository.save(newUser);
     }
 
+    @Transactional
     public User updateUser(User request, Long userID, Long roleID) {
-
-        User user = findUSer(userID);
+        User user = findUser(userID);
         Role role = roleService.findOneRole(roleID);
-
-        assert user != null && role != null;
+        if (user == null || role == null) {
+            throw new IllegalArgumentException(Constants.NOT_FOUND);
+        }
 
         user.setFirst_name(request.getFirst_name());
         user.setLast_name(request.getLast_name());
         user.setAddress(request.getAddress());
         user.setEmail(request.getEmail());
         user.setRole(role);
+
         return userRepository.save(user);
     }
 
-    public User findUSer(Long userId) {
-        return userRepository.findById(userId).orElse(null);
-    }
-
+    @Transactional
     public DeleteResponse deleteUser(Long userID) {
         DeleteResponse deleteResponse = new DeleteResponse();
         if (userRepository.existsById(userID)) {
