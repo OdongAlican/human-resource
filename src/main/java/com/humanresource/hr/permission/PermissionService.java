@@ -23,7 +23,8 @@ public class PermissionService {
     }
 
     public Permission findOnePermission(Long permID) {
-        return permissionRepository.findById(permID).orElse(null);
+        return permissionRepository.findById(permID)
+                .orElseThrow(() -> new IllegalArgumentException(Constants.NOT_FOUND));
     }
 
     public DeleteResponse deletePermission(Long permID) {

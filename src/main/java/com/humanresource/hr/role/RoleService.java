@@ -3,7 +3,6 @@ package com.humanresource.hr.role;
 import com.humanresource.hr.helper.Constants;
 import com.humanresource.hr.helper.DeleteResponse;
 import com.humanresource.hr.permission.Permission;
-import com.humanresource.hr.permission.PermissionRepository;
 import com.humanresource.hr.permission.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,33 +19,27 @@ public class RoleService {
     private PermissionService permissionService;
 
     public List<Role> fetchAllRoles() {
-        try {
-            return roleRepository.findAll();
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
+        return roleRepository.findAll();
     }
 
     public Role createRole(Role role) {
-        try {
-            return roleRepository.save(role);
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
+        return roleRepository.save(role);
     }
 
     public Role findOneRole(Long roleId) {
-        return roleRepository.findById(roleId).orElse(null);
+        return roleRepository.findById(roleId)
+                .orElseThrow(() -> new IllegalArgumentException(Constants.NOT_FOUND));
     }
 
     public Role assignPermissionsToRole(Long roleID, Long permID) {
 
-        Set<Permission> permissions = null;
         Role role = findOneRole(roleID);
-        assert role != null;
+
+        if (role == null)
+            throw new IllegalArgumentException(Constants.NOT_FOUND);
 
         Permission permission = permissionService.findOnePermission(permID);
-        permissions = role.getPermissions();
+        Set<Permission> permissions = role.getPermissions();
         permissions.add(permission);
         role.setPermissions(permissions);
         return roleRepository.save(role);

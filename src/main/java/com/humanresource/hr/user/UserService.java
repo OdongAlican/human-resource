@@ -23,13 +23,11 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    @Transactional(readOnly = true)
     public User findUser(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException(Constants.NOT_FOUND + userId));
     }
 
-    @Transactional
     public User saveUser(User user, Long roleID) {
         Role role = roleService.findOneRole(roleID);
         if (role == null) {
@@ -48,7 +46,6 @@ public class UserService {
         return userRepository.save(newUser);
     }
 
-    @Transactional
     public User updateUser(User request, Long userID, Long roleID) {
         User user = findUser(userID);
         Role role = roleService.findOneRole(roleID);
@@ -65,7 +62,6 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    @Transactional
     public DeleteResponse deleteUser(Long userID) {
         DeleteResponse deleteResponse = new DeleteResponse();
         if (userRepository.existsById(userID)) {
