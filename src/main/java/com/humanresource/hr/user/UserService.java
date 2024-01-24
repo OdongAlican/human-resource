@@ -22,7 +22,7 @@ public class UserService {
 
     public User saveUser(User user, Long roleID) {
 
-        Role role = roleService.findOneRole(roleID).orElse(null);
+        Role role = roleService.findOneRole(roleID);
         assert role != null;
 
         User requestBody = User.builder()
@@ -39,7 +39,7 @@ public class UserService {
     public User updateUser(User request, Long userID, Long roleID) {
 
         User user = findUSer(userID);
-        Role role = roleService.findOneRole(roleID).orElse(null);
+        Role role = roleService.findOneRole(roleID);
 
         assert user != null && role != null;
 

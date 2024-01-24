@@ -4,6 +4,7 @@ import com.humanresource.hr.helper.Constants;
 import com.humanresource.hr.helper.DeleteResponse;
 import com.humanresource.hr.permission.Permission;
 import com.humanresource.hr.permission.PermissionRepository;
+import com.humanresource.hr.permission.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ public class RoleService {
     private RoleRepository roleRepository;
 
     @Autowired
-    private PermissionRepository permissionRepository;
+    private PermissionService permissionService;
 
     public List<Role> fetchAllRoles() {
         try {
@@ -34,32 +35,22 @@ public class RoleService {
         }
     }
 
-    public Optional<Role> findOneRole(Long roleId) {
-        try {
-            return roleRepository.findById(roleId);
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
+    public Role findOneRole(Long roleId) {
+        return roleRepository.findById(roleId).orElse(null);
     }
 
     public Role assignPermissionsToRole(Long roleID, Long permID) {
 
-        try {
-            Set<Permission> permissions = null;
-            Optional<Role> role = roleRepository.findById(roleID);
-            Optional<Permission> permission = permissionRepository.findById(permID);
+        Set<Permission> permissions = null;
+        Role role = findOneRole(roleID);
+        assert role != null;
 
-            if (role.isPresent() && permission.isPresent()) {
-                permissions = role.get().getPermissions();
-                permissions.add(permission.get());
-                role.get().setPermissions(permissions);
-                return roleRepository.save(role.get());
-            } else {
-                return null;
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
+        Permission permission = permissionService.findOnePermission(permID);
+        permissions = role.getPermissions();
+        permissions.add(permission);
+        role.setPermissions(permissions);
+        return roleRepository.save(role);
+
     }
 
     public DeleteResponse deleteRole(Long roleID) {
@@ -73,10 +64,6 @@ public class RoleService {
             response.setSuccess(false);
         }
         return response;
-    }
-
-    public Role fetchRole(Long roleID) {
-        return roleRepository.findById(roleID).orElse(null);
     }
 
     public Role updateRole(Long roleID, Role role) {

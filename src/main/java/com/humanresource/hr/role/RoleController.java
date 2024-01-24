@@ -26,7 +26,7 @@ public class RoleController {
     @GetMapping("/roles/{roleID}")
     public ResponseEntity<?> fetchRole(@PathVariable Long roleID) {
         try {
-            Role role = roleService.fetchRole(roleID);
+            Role role = roleService.findOneRole(roleID);
             return new ResponseEntity<>(role, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);

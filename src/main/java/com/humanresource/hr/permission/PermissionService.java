@@ -1,5 +1,7 @@
 package com.humanresource.hr.permission;
 
+import com.humanresource.hr.helper.Constants;
+import com.humanresource.hr.helper.DeleteResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,16 +22,21 @@ public class PermissionService {
         return permissionRepository.findAll();
     }
 
-    public Map<String, Object> deletePermission(Long permID) {
-        Map<String, Object> response = new HashMap<>();
-        try {
+    public Permission findOnePermission(Long permID) {
+        return permissionRepository.findById(permID).orElse(null);
+    }
+
+    public DeleteResponse deletePermission(Long permID) {
+        DeleteResponse response = new DeleteResponse();
+        if (permissionRepository.existsById(permID)) {
             permissionRepository.deleteById(permID);
-            response.put("response", "Deleted successfully");
-            response.put("success", true);
-            return response;
-        } catch (Exception e) {
-            response.put("response", e.getMessage());
-            return response;
+            response.setMessage(Constants.DELETED_SUCCESSFULLY);
+            response.setSuccess(true);
+        } else {
+            response.setMessage(Constants.ENTITY_NOT_FOUND);
+            response.setSuccess(false);
         }
+
+        return response;
     }
 }
