@@ -1,5 +1,6 @@
 package com.humanresource.hr.permission;
 
+import com.humanresource.hr.exception.ControllerRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class PermissionController {
             Permission response = permissionService.createPermission(permission);
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ControllerRequestException(e.getMessage());
         }
     }
 
