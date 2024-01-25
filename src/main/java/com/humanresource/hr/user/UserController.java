@@ -32,10 +32,10 @@ public class UserController {
         }
     }
 
-    @PutMapping("/users/{userID}/role/{roleID}")
-    public ResponseEntity<User> updateUser(@PathVariable Long roleID, @PathVariable Long userID, @RequestBody User user) {
+    @PutMapping("/users/{roleId}")
+    public ResponseEntity<User> updateUser(@PathVariable Long roleId, @RequestBody User user) {
         try {
-            User response = userService.updateUser(user, userID, roleID);
+            User response = userService.updateUser(user, roleId);
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (Exception e) {
             throw new ControllerRequestException(e.getMessage());

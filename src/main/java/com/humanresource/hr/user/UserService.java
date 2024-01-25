@@ -4,6 +4,7 @@ import com.humanresource.hr.helper.Constants;
 import com.humanresource.hr.helper.DeleteResponse;
 import com.humanresource.hr.role.Role;
 import com.humanresource.hr.role.RoleService;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,7 @@ public class UserService {
 
     public User findUser(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException(Constants.NOT_FOUND + userId));
+                .orElseThrow(() -> new IllegalArgumentException(Constants.NOT_FOUND));
     }
 
     public User saveUser(User user, Long roleID) {
@@ -45,19 +46,15 @@ public class UserService {
         return userRepository.save(newUser);
     }
 
-    public User updateUser(User request, Long userID, Long roleID) {
-        User user = findUser(userID);
-        Role role = roleService.findOneRole(roleID);
-        if (user == null || role == null) {
-            throw new IllegalArgumentException(Constants.NOT_FOUND);
-        }
-
+    public User updateUser(@NonNull User request, Long roleId) {
+        User user = findUser(request.getId());
+        Role role = roleService.findOneRole(roleId);
         user.setFirst_name(request.getFirst_name());
         user.setLast_name(request.getLast_name());
         user.setAddress(request.getAddress());
-        user.setEmail(request.getEmail());
+        user.setPhone(request.getPhone());
         user.setRole(role);
-
+        user.setEmail(request.getEmail());
         return userRepository.save(user);
     }
 

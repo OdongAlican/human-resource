@@ -23,6 +23,7 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long Id;
+
     @NotNull
     private String name;
 
