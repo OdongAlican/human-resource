@@ -43,7 +43,7 @@ public class UserController {
     }
 
     @GetMapping("/users/{userID}")
-    public ResponseEntity<?> getSingleUser(@PathVariable Long userID) throws NotFoundException {
+    public ResponseEntity<User> getSingleUser(@PathVariable Long userID) throws NotFoundException {
         User user = userService.findUser(userID);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
