@@ -1,5 +1,6 @@
 package com.humanresource.hr.user;
 
+import com.humanresource.hr.exception.NotFoundException;
 import com.humanresource.hr.helper.Constants;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,13 +43,9 @@ public class UserController {
     }
 
     @GetMapping("/users/{userID}")
-    public ResponseEntity<?> getSingleUser(@PathVariable Long userID) {
-        try {
-            User user = userService.findUser(userID);
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<?> getSingleUser(@PathVariable Long userID) throws NotFoundException {
+        User user = userService.findUser(userID);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @DeleteMapping("/users/{userID}")
