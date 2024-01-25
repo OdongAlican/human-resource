@@ -5,9 +5,7 @@ import com.humanresource.hr.helper.DeleteResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class PermissionService {
@@ -39,5 +37,11 @@ public class PermissionService {
         }
 
         return response;
+    }
+
+    public Permission updatePermission(Long permID, Permission request) {
+        Permission permission = findOnePermission(permID);
+        permission.setName(request.getName());
+        return permissionRepository.save(permission);
     }
 }

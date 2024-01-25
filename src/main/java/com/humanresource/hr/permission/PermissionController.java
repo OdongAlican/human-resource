@@ -44,4 +44,14 @@ public class PermissionController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PutMapping("/permissions/{permID}")
+    public ResponseEntity<?> updatePermission(@PathVariable Long permID, @RequestBody Permission request) {
+        try {
+            Permission response = permissionService.updatePermission(permID, request);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
