@@ -2,6 +2,7 @@ package com.humanresource.hr.permission;
 
 import com.humanresource.hr.helper.Constants;
 import com.humanresource.hr.helper.DeleteResponse;
+import com.humanresource.hr.role.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,8 +28,15 @@ public class PermissionService {
 
     public DeleteResponse deletePermission(Long permID) {
         DeleteResponse response = new DeleteResponse();
+
+        Permission permission = findOnePermission(permID);
+
+        for (Role role : permission.getRoles()){
+            role.getPermissions().remove(permission);
+        }
+
         if (permissionRepository.existsById(permID)) {
-            permissionRepository.deleteById(permID);
+            permissionRepository.delete(permission);
             response.setMessage(Constants.DELETED_SUCCESSFULLY);
             response.setSuccess(true);
         } else {
