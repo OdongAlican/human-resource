@@ -29,6 +29,7 @@ public class User {
 
     @Email(message = Constants.EMAIL_VALIDATOR)
     @NotNull(message = Constants.NULL_FIELD_VALIDATOR)
+    @NotBlank(message = Constants.BLANK_FIELD_VALIDATOR)
     private String email;
 
     @NotNull(message = Constants.NULL_FIELD_VALIDATOR)
