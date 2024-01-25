@@ -32,7 +32,7 @@ public class UserController {
     }
 
     @PutMapping("/users/{roleId}")
-    public ResponseEntity<?> updateUser(@PathVariable Long roleId, @RequestBody User user) {
+    public ResponseEntity<?> updateUser(@PathVariable Long roleId, @RequestBody @Valid User user) {
         try {
             User response = userService.updateUser(user, roleId);
             return new ResponseEntity<>(response, HttpStatus.CREATED);

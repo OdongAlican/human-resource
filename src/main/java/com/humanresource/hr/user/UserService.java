@@ -1,5 +1,6 @@
 package com.humanresource.hr.user;
 
+import com.humanresource.hr.exception.NotFoundException;
 import com.humanresource.hr.helper.Constants;
 import com.humanresource.hr.helper.DeleteResponse;
 import com.humanresource.hr.role.Role;
@@ -23,9 +24,9 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User findUser(Long userId) {
+    public User findUser(Long userId) throws NotFoundException {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException(Constants.NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException("User with ID " + userId + " is not found"));
     }
 
     public User saveUser(User user, Long roleID) {
@@ -46,9 +47,11 @@ public class UserService {
         return userRepository.save(newUser);
     }
 
-    public User updateUser(@NonNull User request, Long roleId) {
+    public User updateUser(@NonNull User request, Long roleId) throws NotFoundException {
+
         User user = findUser(request.getId());
         Role role = roleService.findOneRole(roleId);
+
         user.setFirst_name(request.getFirst_name());
         user.setLast_name(request.getLast_name());
         user.setAddress(request.getAddress());
