@@ -23,27 +23,27 @@ public class UserController {
     }
 
     @PostMapping("/users/{roleId}")
-    public ResponseEntity<?> createUser(@PathVariable Long roleId, @RequestBody @Valid User user) {
-        try {
-            User response = userService.saveUser(user, roleId);
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<User> createUser(
+            @PathVariable Long roleId,
+            @RequestBody @Valid User user
+    ) throws NotFoundException {
+        User response = userService.saveUser(user, roleId);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PutMapping("/users/{roleId}")
-    public ResponseEntity<?> updateUser(@PathVariable Long roleId, @RequestBody @Valid User user) {
-        try {
-            User response = userService.updateUser(user, roleId);
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<User> updateUser(
+            @PathVariable Long roleId,
+            @RequestBody @Valid User user
+    ) throws NotFoundException {
+        User response = userService.updateUser(user, roleId);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("/users/{userID}")
-    public ResponseEntity<User> getSingleUser(@PathVariable Long userID) throws NotFoundException {
+    public ResponseEntity<User> getSingleUser(
+            @PathVariable Long userID
+    ) throws NotFoundException {
         User user = userService.findUser(userID);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }

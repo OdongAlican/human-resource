@@ -1,5 +1,6 @@
 package com.humanresource.hr.role;
 
+import com.humanresource.hr.exception.NotFoundException;
 import com.humanresource.hr.helper.Constants;
 import com.humanresource.hr.helper.DeleteResponse;
 import com.humanresource.hr.permission.Permission;
@@ -26,17 +27,17 @@ public class RoleService {
         return roleRepository.save(role);
     }
 
-    public Role findOneRole(Long roleId) {
+    public Role findOneRole(Long roleId) throws NotFoundException {
         return roleRepository.findById(roleId)
-                .orElseThrow(() -> new IllegalArgumentException(Constants.NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException("User with ID " + roleId + " is not found"));
     }
 
-    public Role assignPermissionsToRole(Long roleID, Long permID) {
+    public Role assignPermissionsToRole(Long roleID, Long permID) throws NotFoundException {
 
         Role role = findOneRole(roleID);
 
         if (role == null)
-            throw new IllegalArgumentException(Constants.NOT_FOUND);
+            throw new NotFoundException("User with ID " + roleID + " is not found");
 
         Permission permission = permissionService.findOnePermission(permID);
         Set<Permission> permissions = role.getPermissions();

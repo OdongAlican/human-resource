@@ -29,10 +29,10 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("User with ID " + userId + " is not found"));
     }
 
-    public User saveUser(User user, Long roleID) {
+    public User saveUser(User user, Long roleID) throws NotFoundException {
         Role role = roleService.findOneRole(roleID);
         if (role == null) {
-            throw new IllegalArgumentException(Constants.NOT_FOUND + roleID);
+            throw new NotFoundException(("User with ID " + roleID + " is not found"));
         }
 
         User newUser = User.builder()
