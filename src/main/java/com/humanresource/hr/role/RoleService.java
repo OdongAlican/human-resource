@@ -36,9 +36,6 @@ public class RoleService {
 
         Role role = findOneRole(roleID);
 
-        if (role == null)
-            throw new NotFoundException("User with ID " + roleID + " is not found");
-
         Permission permission = permissionService.findOnePermission(permID);
         Set<Permission> permissions = role.getPermissions();
         permissions.add(permission);
@@ -60,15 +57,10 @@ public class RoleService {
         return response;
     }
 
-    public Role updateRole(Long roleID, Role role) {
-
-        try {
-            Role currentData = roleRepository.findById(roleID).orElse(null);
-            assert currentData != null;
+    public Role updateRole(Long roleID, Role role) throws NotFoundException {
+            Role currentData = findOneRole(roleID);
             currentData.setName(role.getName());
             return roleRepository.save(currentData);
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
-        }
+
     }
 }

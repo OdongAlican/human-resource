@@ -1,8 +1,10 @@
 package com.humanresource.hr.permission;
 
+import com.humanresource.hr.exception.NotFoundException;
 import com.humanresource.hr.helper.Constants;
 import com.humanresource.hr.helper.DeleteResponse;
 import com.humanresource.hr.role.Role;
+import org.springframework.beans.NotReadablePropertyException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,17 +23,17 @@ public class PermissionService {
         return permissionRepository.findAll();
     }
 
-    public Permission findOnePermission(Long permID) {
+    public Permission findOnePermission(Long permID) throws NotFoundException {
         return permissionRepository.findById(permID)
-                .orElseThrow(() -> new IllegalArgumentException(Constants.NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException("Permission with ID: " + permID + " not found"));
     }
 
-    public DeleteResponse deletePermission(Long permID) {
+    public DeleteResponse deletePermission(Long permID) throws NotFoundException {
         DeleteResponse response = new DeleteResponse();
 
         Permission permission = findOnePermission(permID);
 
-        for (Role role : permission.getRoles()){
+        for (Role role : permission.getRoles()) {
             role.getPermissions().remove(permission);
         }
 
@@ -47,7 +49,7 @@ public class PermissionService {
         return response;
     }
 
-    public Permission updatePermission(Long permID, Permission request) {
+    public Permission updatePermission(Long permID, Permission request) throws NotFoundException {
         Permission permission = findOnePermission(permID);
         permission.setName(request.getName());
         return permissionRepository.save(permission);
