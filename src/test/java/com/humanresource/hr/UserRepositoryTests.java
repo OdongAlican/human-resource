@@ -35,13 +35,18 @@ public class UserRepositoryTests {
         userRepository.save(user);
 
         Assertions.assertThat(user.getId()).isGreaterThan(0);
+        Assertions.assertThat(user.getEmail()).isEqualTo("johndoe@gmail.com");
+        Assertions.assertThat(user.getFirst_name()).isNotEqualTo("johndoe@gmail.com");
+        Assertions.assertThat(user.getFirst_name()).isEqualTo("John");
+        Assertions.assertThat(user.getLast_name()).isEqualTo("Doe");
+    }
+
+    @Test
+    public void updateRole(){
+
     }
 
     private Role createRole() {
-        Role role = Role.builder()
-                .name("Admin")
-                .build();
-
-        return roleRepository.save(role);
+        return roleRepository.save(Role.builder().name("Admin").build());
     }
 }
