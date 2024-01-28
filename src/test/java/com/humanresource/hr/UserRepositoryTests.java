@@ -4,11 +4,15 @@ import com.humanresource.hr.role.Role;
 import com.humanresource.hr.role.RoleRepository;
 import com.humanresource.hr.user.User;
 import com.humanresource.hr.user.UserRepository;
+import lombok.NonNull;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
+import java.util.List;
+import java.util.Optional;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -42,11 +46,19 @@ public class UserRepositoryTests {
     }
 
     @Test
-    public void updateRole(){
-
+    public void getUser() {
+        Optional<User> user = userRepository.findById(1L);
+        user.ifPresent(value -> Assertions.assertThat(value.getId()).isEqualTo(1L));
+        user.ifPresent(value -> Assertions.assertThat(value.getAddress()).isEqualTo("Uganda"));
     }
 
-    private Role createRole() {
+    @Test
+    public void getListOfUser() {
+        List<User> users = userRepository.findAll();
+        Assertions.assertThat(users.size()).isGreaterThan(0);
+    }
+
+    private @NonNull Role createRole() {
         return roleRepository.save(Role.builder().name("Admin").build());
     }
 }
