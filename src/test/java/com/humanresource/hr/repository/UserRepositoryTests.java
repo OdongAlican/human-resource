@@ -1,4 +1,4 @@
-package com.humanresource.hr;
+package com.humanresource.hr.repository;
 
 import com.humanresource.hr.role.Role;
 import com.humanresource.hr.role.RoleRepository;
