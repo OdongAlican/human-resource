@@ -4,19 +4,16 @@ import com.humanresource.hr.role.Role;
 import com.humanresource.hr.role.RoleRepository;
 import com.humanresource.hr.user.User;
 import com.humanresource.hr.user.UserRepository;
-import lombok.NonNull;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.util.List;
-import java.util.Optional;
-
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class UserRepositoryTests {
+
     @Autowired
     private UserRepository userRepository;
 
@@ -24,10 +21,39 @@ public class UserRepositoryTests {
     private RoleRepository roleRepository;
 
     @Test
-    public void saveUser() {
+    public void testSaveUser() {
         Role role = createRole();
+        User user = createUser(role);
+        User createdUser = userRepository.save(user);
+        Assertions.assertThat(createdUser.getEmail()).isEqualTo("johndoe@gmail.com");
+        Assertions.assertThat(createdUser.getFirst_name()).isEqualTo("John");
+        Assertions.assertThat(createdUser.getLast_name()).isEqualTo("Doe");
+        Assertions.assertThat(createdUser.getLast_name()).isNotEqualTo("sammy");
+    }
 
-        User user = User.builder()
+    @Test
+    public void testUpdateUser() {
+
+        Role role = createRole();
+        User user = createUser(role);
+        User response = userRepository.save(user);
+        User foundUser = findUserById(response.getId());
+
+        foundUser.setEmail("updatedEmail@gmail.com");
+        userRepository.save(foundUser);
+
+        User updatedUser = findUserById(response.getId());
+
+        Assertions.assertThat(updatedUser).isNotNull();
+        Assertions.assertThat(updatedUser.getId()).isEqualTo(response.getId());
+        Assertions.assertThat(updatedUser.getEmail()).isEqualTo("updatedEmail@gmail.com");
+        Assertions.assertThat(updatedUser.getEmail()).isNotEqualTo("johndoe@gmail.com");
+        Assertions.assertThat(updatedUser.getLast_name()).isEqualTo("Doe");
+
+    }
+
+    private User createUser(Role role) {
+        return User.builder()
                 .first_name("John")
                 .last_name("Doe")
                 .phone("+256777338787")
@@ -35,30 +61,14 @@ public class UserRepositoryTests {
                 .address("Uganda")
                 .role(role)
                 .build();
-
-        userRepository.save(user);
-
-        Assertions.assertThat(user.getId()).isGreaterThan(0);
-        Assertions.assertThat(user.getEmail()).isEqualTo("johndoe@gmail.com");
-        Assertions.assertThat(user.getFirst_name()).isNotEqualTo("johndoe@gmail.com");
-        Assertions.assertThat(user.getFirst_name()).isEqualTo("John");
-        Assertions.assertThat(user.getLast_name()).isEqualTo("Doe");
     }
 
-    @Test
-    public void getUser() {
-        Optional<User> user = userRepository.findById(1L);
-        user.ifPresent(value -> Assertions.assertThat(value.getId()).isEqualTo(1L));
-        user.ifPresent(value -> Assertions.assertThat(value.getAddress()).isEqualTo("Uganda"));
+
+    private User findUserById(Long userId) {
+        return userRepository.findById(userId).orElse(null);
     }
 
-    @Test
-    public void getListOfUser() {
-        List<User> users = userRepository.findAll();
-        Assertions.assertThat(users.size()).isGreaterThan(0);
-    }
-
-    private @NonNull Role createRole() {
-        return roleRepository.save(Role.builder().name("Admin").build());
+    private Role createRole() {
+        return roleRepository.save(Role.builder().name("TestRole").build());
     }
 }
