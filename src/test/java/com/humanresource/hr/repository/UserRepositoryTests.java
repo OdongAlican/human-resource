@@ -65,7 +65,7 @@ public class UserRepositoryTests {
         Role role = createRole();
         int numberOfUsersToCreate = 5;
 
-        List<User> users = new ArrayList<User>();
+        List<User> users = new ArrayList<>();
 
         for (int i = 1; i <= numberOfUsersToCreate; i++) {
 
