@@ -13,6 +13,7 @@ import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -84,6 +85,20 @@ public class UserRepositoryTests {
         Assertions.assertThat(createdUsers.size()).isEqualTo(numberOfUsersToCreate);
         Assertions.assertThat(createdUsers.size()).isNotEqualTo(6);
 
+    }
+
+    @Test
+    @DirtiesContext
+    public void deleteUser() {
+        Role role = createRole();
+        User user = createUser(role);
+        User response = userRepository.save(user);
+        Long userID = response.getId();
+
+        userRepository.deleteById(userID);
+        Optional<User> result = userRepository.findById(userID);
+        Assertions.assertThat(result.isEmpty()).isEqualTo(true);
+        Assertions.assertThat(result.isPresent()).isEqualTo(false);
     }
 
     private User createUser(Role role) {
