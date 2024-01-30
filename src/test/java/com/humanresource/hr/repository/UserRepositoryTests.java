@@ -9,6 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.DirtiesContext;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -21,6 +25,7 @@ public class UserRepositoryTests {
     private RoleRepository roleRepository;
 
     @Test
+    @DirtiesContext
     public void testSaveUser() {
         Role role = createRole();
         User user = createUser(role);
@@ -32,6 +37,7 @@ public class UserRepositoryTests {
     }
 
     @Test
+    @DirtiesContext
     public void testUpdateUser() {
 
         Role role = createRole();
@@ -49,6 +55,34 @@ public class UserRepositoryTests {
         Assertions.assertThat(updatedUser.getEmail()).isEqualTo("updatedEmail@gmail.com");
         Assertions.assertThat(updatedUser.getEmail()).isNotEqualTo("johndoe@gmail.com");
         Assertions.assertThat(updatedUser.getLast_name()).isEqualTo("Doe");
+
+    }
+
+    @Test
+    @DirtiesContext
+    public void testCreateMultipleUsers() {
+        Role role = createRole();
+        int numberOfUsersToCreate = 5;
+
+        List<User> users = new ArrayList<User>();
+
+        for (int i = 1; i <= numberOfUsersToCreate; i++) {
+
+            User user = User.builder()
+                    .first_name("john" + i)
+                    .last_name("Doe" + i)
+                    .phone("+256777338787")
+                    .email("john" + i + "@gmail.com")
+                    .address("Uganda")
+                    .role(role)
+                    .build();
+            users.add(user);
+        }
+
+        List<User> createdUsers = userRepository.saveAll(users);
+
+        Assertions.assertThat(createdUsers.size()).isEqualTo(numberOfUsersToCreate);
+        Assertions.assertThat(createdUsers.size()).isNotEqualTo(6);
 
     }
 
