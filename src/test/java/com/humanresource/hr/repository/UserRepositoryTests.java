@@ -89,7 +89,7 @@ public class UserRepositoryTests {
 
     @Test
     @DirtiesContext
-    public void deleteUser() {
+    public void testDeleteUser() {
         Role role = createRole();
         User user = createUser(role);
         User response = userRepository.save(user);
