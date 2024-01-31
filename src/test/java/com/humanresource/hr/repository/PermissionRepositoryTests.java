@@ -9,6 +9,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
 
+import java.util.Optional;
+
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -28,13 +30,27 @@ public class PermissionRepositoryTests {
         Assertions.assertThat(response).isNotNull();
         Assertions.assertThat(response.getName()).isEqualTo("create");
         Assertions.assertThat(response.getName()).isNotEqualTo("update");
-
     }
 
+    @Test
+    @DirtiesContext
+    public void testUpdatePermission() {
+        Permission permission = createPermission();
+        Permission data = permissionRepository.save(permission);
+
+        Permission response = permissionRepository.findById(data.getId()).orElse(null);
+
+        assert response != null;
+        response.setName("update");
+        permissionRepository.save(response);
+
+        Permission perm = permissionRepository.findById(data.getId()).orElse(null);
+        Assertions.assertThat(perm).isNotNull();
+        Assertions.assertThat(perm.getName()).isEqualTo("update");
+        Assertions.assertThat(perm.getName()).isNotEqualTo("create");
+    }
 
     private Permission createPermission() {
-        return Permission.builder()
-                .name("create")
-                .build();
+        return Permission.builder().name("create").build();
     }
 }
