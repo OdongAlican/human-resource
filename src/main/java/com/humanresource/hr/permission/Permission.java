@@ -30,4 +30,5 @@ public class Permission {
     @JsonIgnore
     @ManyToMany(mappedBy = "permissions")
     private Set<Role> roles = new HashSet<>();
+
 }

@@ -9,6 +9,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
 
+import java.util.Optional;
+
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -46,6 +48,18 @@ public class PermissionRepositoryTests {
         Assertions.assertThat(perm).isNotNull();
         Assertions.assertThat(perm.getName()).isEqualTo("update");
         Assertions.assertThat(perm.getName()).isNotEqualTo("create");
+    }
+
+    @Test
+    @DirtiesContext
+    public void testDeletePermission() {
+        Permission permission = createPermission();
+        Permission perm = permissionRepository.save(permission);
+
+        permissionRepository.deleteById(perm.getId());
+        Optional<Permission> result = permissionRepository.findById(perm.getId());
+        Assertions.assertThat(result.isEmpty()).isEqualTo(true);
+        Assertions.assertThat(result.isPresent()).isEqualTo(false);
     }
 
     private Permission createPermission() {
