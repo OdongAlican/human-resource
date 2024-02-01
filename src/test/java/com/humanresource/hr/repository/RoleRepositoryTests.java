@@ -9,6 +9,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
 
+import java.util.Optional;
+
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class RoleRepositoryTests {
@@ -37,6 +39,19 @@ public class RoleRepositoryTests {
         Assertions.assertThat(result).isNotNull();
         Assertions.assertThat(result.getName()).isEqualTo("User");
         Assertions.assertThat(result.getName()).isNotEqualTo("Admin");
+    }
+
+    @Test
+    @DirtiesContext
+    public void testDeleteRole() {
+        Role role = createRole();
+        Role response = roleRepository.save(role);
+
+        roleRepository.deleteById(response.getId());
+        Optional<Role> result = roleRepository.findById(response.getId());
+        Assertions.assertThat(result.isEmpty()).isEqualTo(true);
+        Assertions.assertThat(result.isPresent()).isEqualTo(false);
+
     }
 
     private Role createRole() {
