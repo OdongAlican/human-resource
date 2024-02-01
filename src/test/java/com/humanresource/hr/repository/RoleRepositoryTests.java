@@ -28,8 +28,15 @@ public class RoleRepositoryTests {
 
     @Test
     @DirtiesContext
-    public void testUpdateRole(){
+    public void testUpdateRole() {
+        Role role = createRole();
+        Role response = roleRepository.save(role);
 
+        response.setName("User");
+        Role result = roleRepository.save(response);
+        Assertions.assertThat(result).isNotNull();
+        Assertions.assertThat(result.getName()).isEqualTo("User");
+        Assertions.assertThat(result.getName()).isNotEqualTo("Admin");
     }
 
     private Role createRole() {
