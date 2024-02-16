@@ -11,7 +11,6 @@ import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.Optional;
 
-
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class PermissionRepositoryTests {
