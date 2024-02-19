@@ -3,6 +3,7 @@ package com.humanresource.hr.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -25,8 +26,10 @@ public class SecurityConfiguration {
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.authorizeHttpRequests(request -> {
             request.requestMatchers(
-                    "/api/v1/**"
+                    "/api/v1/auth/**"
             ).permitAll();
+            request.requestMatchers(HttpMethod.POST, "/api/v1/users").hasAuthority("CREATE_USER");
+            request.requestMatchers(HttpMethod.GET, "/api/v1/users").hasAuthority("READ_USER");
             request.anyRequest().authenticated();
         });
         http.authenticationProvider(authenticationProvider);
