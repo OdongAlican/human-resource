@@ -25,9 +25,7 @@ public class SecurityConfiguration {
         http.csrf(AbstractHttpConfigurer::disable);
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.authorizeHttpRequests(request -> {
-            request.requestMatchers(
-                    "/api/v1/auth/**"
-            ).permitAll();
+            request.requestMatchers("/api/v1/auth/**").permitAll();
             request.requestMatchers(HttpMethod.POST, "/api/v1/users").hasAuthority("CREATE_USER");
             request.requestMatchers(HttpMethod.GET, "/api/v1/users").hasAuthority("READ_USER");
             request.anyRequest().authenticated();
