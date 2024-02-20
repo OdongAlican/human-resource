@@ -12,7 +12,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
@@ -56,11 +55,11 @@ public class User implements UserDetails {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Role role;
 
-    private Collection<? extends GrantedAuthority> authorities;
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.getName()));
+        return role.getPermissions().stream()
+                .map(permission -> new SimpleGrantedAuthority(permission.getName()))
+                .collect(Collectors.toList());
     }
 
     @Override
