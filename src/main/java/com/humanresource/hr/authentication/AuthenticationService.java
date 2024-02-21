@@ -34,10 +34,12 @@ public class AuthenticationService {
                     .first_name(request.getFirst_name())
                     .last_name(request.getLast_name())
                     .password(passwordEncoder.encode(request.getPassword()))
+                    .address(request.getAddress())
+                    .phone(request.getPhone())
                     .role(role.get())
                     .build();
             userRepository.save(user);
-            return generateToken(user);
+            return generateToken(user, role.get());
         }
         return null;
     }
@@ -51,13 +53,17 @@ public class AuthenticationService {
         );
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new NotFoundException("User not found"));
-        return generateToken(user);
+        return generateToken(user, user.getRole());
     }
 
-    private AuthenticationResponse generateToken(User user) {
+    private AuthenticationResponse generateToken(User user, Role role) {
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
+                .firstname(user.getFirst_name())
+                .lastname(user.getLast_name())
+                .email(user.getEmail())
+                .role(role)
                 .build();
     }
 }
