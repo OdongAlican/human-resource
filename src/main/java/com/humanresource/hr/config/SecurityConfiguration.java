@@ -24,11 +24,11 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request ->
-                    request.requestMatchers("/api/v1/auth/**")
-                            .permitAll()
-                            .requestMatchers(HttpMethod.POST, "/api/v1/users").hasAuthority("CREATE_USER")
-                            .anyRequest()
-                            .authenticated()
+                        request.requestMatchers("/api/v1/auth/**")
+                                .permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/v1/users").hasAuthority("CREATE_USER")
+                                .anyRequest()
+                                .authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
