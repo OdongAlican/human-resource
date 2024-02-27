@@ -27,8 +27,8 @@ public class Permission {
     @NotBlank(message = Constants.BLANK_FIELD_VALIDATOR)
     private String name;
 
-    @JsonIgnore
     @ManyToMany(mappedBy = "permissions")
+    @JsonIgnore
     private Set<Role> roles = new HashSet<>();
 
 }
