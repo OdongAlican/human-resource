@@ -27,6 +27,7 @@ public class SecurityConfiguration {
                         request.requestMatchers("/api/v1/auth/**")
                                 .permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/v1/users").hasAuthority("CREATE_USER")
+                                .requestMatchers(HttpMethod.GET, "/api/v1/users").hasAuthority("READ_USER")
                                 .anyRequest()
                                 .authenticated()
                 )
