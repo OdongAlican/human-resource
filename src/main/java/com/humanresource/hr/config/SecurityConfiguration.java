@@ -12,6 +12,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static com.humanresource.hr.helper.Constants.*;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -24,10 +26,16 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request ->
-                        request.requestMatchers("/api/v1/auth/**")
+                        request.requestMatchers(AUTH_ROUTE)
                                 .permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/v1/users").hasAuthority("CREATE_USER")
-                                .requestMatchers(HttpMethod.GET, "/api/v1/users").hasAuthority("READ_USER")
+                                .requestMatchers(HttpMethod.POST, USER_ROUTE).hasAuthority(CREATE_USER)
+                                .requestMatchers(HttpMethod.GET, USER_ROUTE).hasAuthority(READ_USER)
+                                .requestMatchers(HttpMethod.DELETE, USER_ROUTE).hasAuthority(DELETE_USER)
+                                .requestMatchers(HttpMethod.PUT, USER_ROUTE).hasAuthority(UPDATE_USER)
+                                .requestMatchers(HttpMethod.POST, ROLE_ROUTE).hasAuthority(CREATE_ROLE)
+                                .requestMatchers(HttpMethod.GET, ROLE_ROUTE).hasAuthority(READ_ROLE)
+                                .requestMatchers(HttpMethod.DELETE, ROLE_ROUTE).hasAuthority(DELETE_ROLE)
+                                .requestMatchers(HttpMethod.PUT, ROLE_ROUTE).hasAuthority(UPDATE_ROLE)
                                 .anyRequest()
                                 .authenticated()
                 )
