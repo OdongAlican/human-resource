@@ -21,7 +21,12 @@ public class Constants {
     public static final String CREATE_ROLE = "CREATE_ROLE";
     public static final String DELETE_ROLE = "DELETE_ROLE";
     public static final String UPDATE_ROLE = "UPDATE_ROLE";
-    public static final String USER_ROUTE = "/api/v1/users/**";
-    public static final String ROLE_ROUTE = "/api/v1/roles/**";
-    public static final String AUTH_ROUTE = "/api/v1/auth/**";
+    public static final String READ_PERMISSION = "READ_PERMISSION";
+    public static final String CREATE_PERMISSION = "CREATE_PERMISSION";
+    public static final String DELETE_PERMISSION = "DELETE_PERMISSION";
+    public static final String UPDATE_PERMISSION = "UPDATE_PERMISSION";
+    public static final String USER_ROUTE = GENERAL_ROUTE + "/users/**";
+    public static final String ROLE_ROUTE = GENERAL_ROUTE + "/roles/**";
+    public static final String PERMISSION_ROUTE = GENERAL_ROUTE + "/permissions/**";
+    public static final String AUTH_ROUTE = GENERAL_ROUTE + "/auth/**";
 }
